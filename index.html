@@ -214,7 +214,7 @@
       <p class="lede">Tap a day to see the plan. Dashed items are flexible — do them if the mood strikes, skip without guilt.</p>
       <div class="meta-row">
         <span><span class="k">Base</span> &nbsp;<b>Ramada Hong Kong Grand, TST</b></span>
-        <span><span class="k">Arrive</span> &nbsp;<b>Sun 6:30 PM</b></span>
+        <span><span class="k">Arrive</span> &nbsp;<b>Mon 4:35 AM</b></span>
         <span><span class="k">Depart</span> &nbsp;<b>Thu 3:30 PM</b></span>
         <span><span class="k">Routes</span> &nbsp;<b>walking unless noted</b></span>
       </div>
@@ -228,8 +228,7 @@
 
   <nav class="tabs" role="tablist" aria-label="Itinerary days">
     <button class="tab" role="tab" data-tab="essentials" aria-selected="false"><span class="day">Essentials</span><span class="sub">要項 · Logistics</span></button>
-    <button class="tab" role="tab" data-tab="sun" aria-selected="false"><span class="day">Sun</span><span class="sub">Arrival</span></button>
-    <button class="tab" role="tab" data-tab="mon" aria-selected="false"><span class="day">Mon</span><span class="sub">Day 1</span></button>
+    <button class="tab" role="tab" data-tab="mon" aria-selected="false"><span class="day">Mon</span><span class="sub">Arrival</span></button>
     <button class="tab" role="tab" data-tab="tue" aria-selected="false"><span class="day">Tue</span><span class="sub">Day 2</span></button>
     <button class="tab" role="tab" data-tab="wed" aria-selected="false"><span class="day">Wed</span><span class="sub">Day 3</span></button>
     <button class="tab" role="tab" data-tab="thu" aria-selected="false"><span class="day">Thu</span><span class="sub">Departure</span></button>
@@ -253,7 +252,6 @@
   </section>
 
   <!-- DAY PANELS (generated content slots) -->
-  <section class="panel" id="panel-sun" role="tabpanel"></section>
   <section class="panel" id="panel-mon" role="tabpanel"></section>
   <section class="panel" id="panel-tue" role="tabpanel"></section>
   <section class="panel" id="panel-wed" role="tabpanel"></section>
@@ -271,64 +269,49 @@
 <script>
   /* ---------------- Data ---------------- */
   const DAYS = {
-    sun: {
-      code:"SUN", kicker:"Sunday · Arrival", cjk:"日",
-      title:"Drinks & Claypot", sub:"Central · Sheung Wan · SoHo",
-      summary:"Land 6:30pm, drop bags in TST, then cross to Central for a claypot dinner and a five-minute-walk bar crawl. Everything tonight sits in one tight triangle.",
-      capL:"Central / SoHo · walking",
-      fieldnote:{label:"On arrival", text:"Airport Express to Kowloon (~22 min), then the hotel shuttle or a short taxi to the Ramada in TST. Buy an Octopus card at the airport first. Carry cash — tonight's claypot is cash-only."},
-      stops:[
-        {n:1, acc:"SUN·01", time:"8:15 PM", title:"Bar Leone — put name down", cat:"Bar · World No.1", anchor:true, lat:22.2835238, lng:114.1509492,
-         note:"World's Best Bar 2025. No reservations — put your name on the list FIRST (wait is ~2hr). They'll text you. Then go eat and drink nearby while you wait."},
-        {n:2, acc:"SUN·02", time:"8:30 PM", title:"Kwan Kee Claypot Rice", cat:"Claypot", lat:22.2870412, lng:114.1430347,
-         note:"Iconic, chaotic, cash-only; closes 10pm. ~15 min walk from Bar Leone. Eat fast and head back to SoHo for bars while you wait for the callback."},
-        {n:3, acc:"SUN·03", time:"9:30 PM", title:"COA", cat:"Bar · Agave", lat:22.2840082, lng:114.1520992,
-         note:"Agave & mezcal, ranked Asia No.17. Open Sundays — but closed Mondays, so it's tonight or never. Kill time here waiting for Bar Leone's text."},
-        {n:4, acc:"SUN·04", time:"10:30 PM", title:"Bar Leone — return", cat:"Bar · World No.1", lat:22.2835238, lng:114.1509492,
-         note:"Circle back when they text you. Savour it — you earned the wait."},
-        {n:5, acc:"SUN·05", time:"11:30 PM", title:"GOKAN", cat:"Bar · Japanese", lat:22.2802246, lng:114.1564511,
-         note:"Five-flavour cocktails; try the Mapo Mary. A mellow nightcap to close out the crawl."},
-        {n:6, acc:"SUN·06", title:"The Savory Project", cat:"Bar · Omakase · optional", opt:true, lat:22.2837, lng:114.1513,
-         note:"Cocktail omakase — the bartender reads you and builds drinks on the fly. Also closed Mondays, so tonight or never. Swap for COA or use as extra wait-filler."}
-      ]
-    },
     mon: {
-      code:"MON", kicker:"Monday · Day 1", cjk:"月",
-      title:"Central & The Peak", sub:"Sheung Wan · Mid-Levels · Victoria Peak",
-      summary:"Knock out the icons on one walkable hill: coffee, the Peak Tram ride, Michelin roast goose, and an afternoon through Central's design lanes.",
+      code:"MON", kicker:"Monday · Arrival", cjk:"月",
+      title:"Land, Nap & The Peak", sub:"TST · Sheung Wan · Mid-Levels · Victoria Peak",
+      summary:"Land at 4:35 AM, grab Octopus + cash, taxi to hotel, crash for a few hours. Then ease into the city: dim sum, the Peak Tram, roast goose, and Central's design lanes. One bar to close — COA & Savory Project are closed Mondays, so save those for Tuesday.",
       capL:"Central + The Peak · walking + tram",
-      fieldnote:{label:"Before you go", text:"Book Peak Tram timed tickets online in advance — the standby queue is brutal. COA and The Savory Project are closed Mondays, so tonight's bar is Penicillin (or back to Bar Leone / GOKAN)."},
+      fieldnote:{label:"Arrival plan", text:"Flight lands 4:35 AM. Airport Express to Kowloon (~22 min), taxi to Ramada. Check in, sleep till ~9. Book Peak Tram timed tickets online today — the standby queue is brutal."},
       stops:[
-        {n:1, acc:"MON·01", time:"7:30 AM", title:"Sun Hing", cat:"Dim Sum · optional", opt:true, lat:22.2829656, lng:114.1282358,
-         note:"Only if jet lag wakes you early. A Kennedy Town institution — opens 3am, cash-only. A westward detour, but it fills dead dawn hours well."},
-        {n:2, acc:"MON·02", time:"9:00 AM", title:"Halfway Coffee", cat:"Coffee", lat:22.2846615, lng:114.1497724,
+        {n:1, acc:"MON·01", time:"5:00 AM", title:"Airport — Octopus + Cash", cat:"Logistics", lat:22.3080, lng:113.9185,
+         note:"Buy Octopus card and withdraw ~HK$800–1,000 cash from the HSBC ATM in arrivals. Then Airport Express to Kowloon Station."},
+        {n:2, acc:"MON·02", time:"6:00 AM", title:"Ramada Hong Kong Grand — check in", cat:"Hotel", lat:22.2975, lng:114.1755,
+         note:"Drop bags, crash. You'll be jet-lagged; set an alarm for 9 AM. The hotel is on Austin Ave in TST."},
+        {n:3, acc:"MON·03", time:"9:30 AM", title:"Sun Hing", cat:"Dim Sum", lat:22.2829656, lng:114.1282358,
+         note:"Kennedy Town institution — opens 3am, cash-only. Perfect for jet-lag schedules. Worth the westward MTR ride."},
+        {n:4, acc:"MON·04", time:"11:00 AM", title:"Halfway Coffee", cat:"Coffee", lat:22.2846615, lng:114.1497724,
          note:"Sheung Wan, on Cat Street. Coffee served in vintage Chinese porcelain cups."},
-        {n:3, acc:"MON·03", time:"10:15 AM", title:"Peak Tram", cat:"Transit · Sight", anchor:true, lat:22.2778404, lng:114.1594293,
+        {n:5, acc:"MON·05", time:"12:00 PM", title:"Peak Tram", cat:"Transit · Sight", anchor:true, lat:22.2778404, lng:114.1594293,
          note:"Garden Road terminus. Ride to the top for the skyline view, then walk the Lugard Road loop (~40 min) back down through jungle canopy."},
-        {n:4, acc:"MON·04", time:"12:30 PM", title:"Yat Lok", cat:"Roast Goose · 1★", lat:22.2824956, lng:114.1552995,
+        {n:6, acc:"MON·06", time:"2:00 PM", title:"Yat Lok", cat:"Roast Goose · 1★", lat:22.2824956, lng:114.1552995,
          note:"Michelin one-star roast goose on Stanley Street. Tiny, shared tables, quick turnover."},
-        {n:5, acc:"MON·05", time:"2:00 PM", title:"Central–Mid-Levels Escalators", cat:"Sight", lat:22.2838464, lng:114.1549689,
+        {n:7, acc:"MON·07", time:"3:00 PM", title:"Central–Mid-Levels Escalators", cat:"Sight", lat:22.2838464, lng:114.1549689,
          note:"Ride up, wander down through SoHo's lanes and street art."},
-        {n:6, acc:"MON·06", time:"2:30 PM", title:"PMQ", cat:"Design · Shop", lat:22.283328, lng:114.1515669,
+        {n:8, acc:"MON·08", time:"3:30 PM", title:"PMQ", cat:"Design · Shop", lat:22.283328, lng:114.1515669,
          note:"Former police quarters, now design and ceramics studios."},
-        {n:7, acc:"MON·07", time:"3:15 PM", title:"WAKA artisans", cat:"Ceramics", lat:22.2849502, lng:114.1495321,
+        {n:9, acc:"MON·09", time:"4:15 PM", title:"WAKA artisans", cat:"Ceramics", lat:22.2849502, lng:114.1495321,
          note:"Cat Street. A mother-daughter shop curating Japanese utsuwa tableware. Opens noon."},
-        {n:8, acc:"MON·08", time:"7:00 PM", title:"Penicillin", cat:"Bar", lat:22.2822009, lng:114.1540191,
-         note:"Sustainable cocktails — open Mondays, unlike COA and The Savory Project."},
-        {n:9, acc:"MON·09", title:"Tai Cheong Bakery", cat:"Egg Tart · optional", opt:true, lat:22.2826, lng:114.1529,
-         note:"The original egg tart shop that Chris Patten made famous. Crumbly shortcrust, just off the escalators. Grab one walking between stops."},
-        {n:10, acc:"MON·10", title:"Man Mo Temple", cat:"Temple · optional", opt:true, lat:22.2841, lng:114.1500,
+        {n:10, acc:"MON·10", time:"7:00 PM", title:"Kwan Kee Claypot Rice", cat:"Claypot · Dinner", lat:22.2870412, lng:114.1430347,
+         note:"Iconic, chaotic, cash-only; closes 10pm. In Sheung Wan — easy walk from the afternoon stops."},
+        {n:11, acc:"MON·11", time:"9:00 PM", title:"Penicillin", cat:"Bar", lat:22.2822009, lng:114.1540191,
+         note:"Sustainable cocktails — open Mondays. Don't push too late tonight; you're still adjusting."},
+        {n:12, acc:"MON·12", title:"Tai Cheong Bakery", cat:"Egg Tart · optional", opt:true, lat:22.2826, lng:114.1529,
+         note:"The original egg tart shop that Chris Patten made famous. Crumbly shortcrust, just off the escalators."},
+        {n:13, acc:"MON·13", title:"Man Mo Temple", cat:"Temple · optional", opt:true, lat:22.2841, lng:114.1500,
          note:"Incense-coil-draped Taoist temple on Hollywood Road — atmospheric and free. Right by Cat Street, 2 minutes from WAKA."},
-        {n:11, acc:"MON·11", title:"Moonary Coffee", cat:"Coffee · optional", opt:true, lat:22.2843, lng:114.1518,
+        {n:14, acc:"MON·14", title:"Moonary Coffee", cat:"Coffee · optional", opt:true, lat:22.2843, lng:114.1518,
          note:"Tiny Sheung Wan roaster if you want a second coffee hit. More specialty-focused than Halfway."}
       ]
     },
     tue: {
       code:"TUE", kicker:"Tuesday · Day 2", cjk:"火",
-      title:"Causeway Bay & Wan Chai", sub:"East Hong Kong Island",
-      summary:"Your eastern sweep — coffee, beef brisket, ceramics, shopping, egg tarts, and a cha chaan teng dinner. Everything walkable in one strip.",
-      capL:"Causeway Bay / Wan Chai · walking",
-      fieldnote:{label:"Note", text:"Shopping — G2000, Hysan Place, Times Square — clusters right around HOW to live well. Bakehouse has multiple locations; the Wan Chai one is right by Crew."},
+      title:"Causeway Bay, Wan Chai & Bar Crawl", sub:"East Hong Kong Island → Central bars",
+      summary:"Daytime in the east: coffee, beef brisket, ceramics, shopping, egg tarts. Early dinner, then MTR to Central for the bar crawl — COA, Bar Leone, and the rest are all open tonight.",
+      capL:"Causeway Bay / Wan Chai + Central · walking + MTR",
+      fieldnote:{label:"Tonight's the night", text:"COA and The Savory Project are closed Mondays, so Tuesday is your bar crawl night. Put your name down at Bar Leone early (~6–7pm), then eat/drink nearby while you wait for the text back."},
       stops:[
         {n:1, acc:"TUE·01", time:"9:30 AM", title:"E N", cat:"Coffee", lat:22.2775125, lng:114.1829148,
          note:"Leighton Road branch — single-origin pour-overs in a calm, Japanese-feeling room."},
@@ -342,18 +325,24 @@
          note:"Pocket-sized Wan Chai espresso bar."},
         {n:6, acc:"TUE·06", time:"3:15 PM", title:"Bakehouse", cat:"Bakery", lat:22.2763, lng:114.1718,
          note:"Sourdough egg tart — flaky, buttery, iconic. Right next to Crew in Wan Chai."},
-        {n:7, acc:"TUE·07", time:"4:30 PM", title:"Gold Garden Restaurant", cat:"Egg Tart", lat:22.2781, lng:114.1753,
-         note:"Old-school Cantonese egg tarts with a crumbly shortcrust base. A local favourite, no tourist crowds."},
-        {n:8, acc:"TUE·08", time:"6:30 PM", title:"Australia Dairy Company", cat:"Cha Chaan Teng", lat:22.3186, lng:114.1703,
-         note:"Legendary no-nonsense diner in Jordan — scrambled eggs on toast, steamed milk pudding. Brusque service is part of the charm. Quick MTR hop from Wan Chai."},
-        {n:9, acc:"TUE·09", title:"Tai Ping Koon", cat:"Western-Chinese · optional", opt:true, lat:22.2781, lng:114.1826,
-         note:"HK's oldest Western-Chinese restaurant (since 1860). Swiss-style chicken wings and baked Portuguese rice — pure retro comfort food in Causeway Bay."},
-        {n:10, acc:"TUE·10", title:"Heartwarming", cat:"Dessert · optional", opt:true, lat:22.2779, lng:114.1822,
-         note:"Bib Gourmand black sesame rolls and sweet tofu pudding. A perfect mid-afternoon sweet stop near Hysan."},
-        {n:11, acc:"TUE·11", title:"Tin Hau Temple", cat:"Temple · optional", opt:true, lat:22.2822, lng:114.1924,
-         note:"Small neighbourhood temple near Sister Wah — incense and quiet between the shopping bustle. 2-minute detour."},
-        {n:12, acc:"TUE·12", title:"Times Square", cat:"Shopping · optional", opt:true, lat:22.2780, lng:114.1822,
-         note:"Massive Causeway Bay mall if you want air-con retail therapy. Food court in the basement is solid too."}
+        {n:7, acc:"TUE·07", time:"5:30 PM", title:"Australia Dairy Company", cat:"Cha Chaan Teng · Dinner", lat:22.3186, lng:114.1703,
+         note:"Legendary no-nonsense diner in Jordan — scrambled eggs on toast, steamed milk pudding. Brusque service is part of the charm. Eat early so you're in Central by 7."},
+        {n:8, acc:"TUE·08", time:"7:00 PM", title:"Bar Leone — put name down", cat:"Bar · World No.1", lat:22.2835238, lng:114.1509492,
+         note:"World's Best Bar 2025. No reservations — put your name on the list (wait ~2hr). They'll text you. Go drink at COA while you wait."},
+        {n:9, acc:"TUE·09", time:"7:15 PM", title:"COA", cat:"Bar · Agave", lat:22.2840082, lng:114.1520992,
+         note:"Agave & mezcal, ranked Asia No.17. Closed Mondays — this is your shot. Great place to kill time waiting for Bar Leone."},
+        {n:10, acc:"TUE·10", time:"9:00 PM", title:"Bar Leone — return", cat:"Bar · World No.1", lat:22.2835238, lng:114.1509492,
+         note:"Circle back when they text. Savour it."},
+        {n:11, acc:"TUE·11", time:"10:30 PM", title:"GOKAN", cat:"Bar · Japanese", lat:22.2802246, lng:114.1564511,
+         note:"Five-flavour cocktails; try the Mapo Mary. A mellow nightcap."},
+        {n:12, acc:"TUE·12", title:"The Savory Project", cat:"Bar · Omakase · optional", opt:true, lat:22.2837, lng:114.1513,
+         note:"Cocktail omakase — the bartender reads you and builds drinks on the fly. Swap for COA or use as extra wait-filler."},
+        {n:13, acc:"TUE·13", title:"Heartwarming", cat:"Dessert · optional", opt:true, lat:22.2779, lng:114.1822,
+         note:"Bib Gourmand black sesame rolls and sweet tofu pudding. Mid-afternoon sweet stop near Hysan."},
+        {n:14, acc:"TUE·14", title:"Times Square", cat:"Shopping · optional", opt:true, lat:22.2780, lng:114.1822,
+         note:"Massive Causeway Bay mall if you want air-con retail therapy. Food court in the basement is solid too."},
+        {n:15, acc:"TUE·15", title:"Gold Garden Restaurant", cat:"Egg Tart · optional", opt:true, lat:22.2781, lng:114.1753,
+         note:"Old-school Cantonese egg tarts with a crumbly shortcrust base. A local favourite, no tourist crowds."}
       ]
     },
     wed: {
@@ -413,11 +402,11 @@
   };
 
   const ESSENTIALS = [
-    {ix:"01", h:"Arrival — airport to TST", html:"<p>Take the <b>Airport Express</b> to Kowloon Station (~22 min), then the free hotel shuttle or a short taxi to the <b>Ramada Hong Kong Grand</b> in TST. Realistically at the hotel ~8pm. Drop bags and head straight to Central for tonight's bars.</p>"},
+    {ix:"01", h:"Arrival — airport to TST", html:"<p>Flight lands <b>4:35 AM Monday</b>. Take the <b>Airport Express</b> to Kowloon Station (~22 min), then taxi to the <b>Ramada Hong Kong Grand</b> in TST. At hotel by ~6 AM. Check in, sleep a few hours, then ease into the day.</p>"},
     {ix:"02", h:"Octopus card", html:"<p>Grab one at the airport or add it to your phone. It taps you onto the <b>MTR, the Star Ferry, and the Peak Tram</b>, and pays at most eateries — skipping ticket lines all week.</p><ul><li>Still carry <b>cash</b>: Kwan Kee, Sun Hing, Hop Yik Tai and Kam Fai are cash-only.</li></ul>"},
     {ix:"02b", h:"Get cash", html:"<p>Withdraw <b>HKD</b> at the airport ATMs on arrival — HSBC and Hang Seng ATMs have low/no fees for international cards. Aim for <b>~HK$800–1,000</b> to cover the cash-only spots (claypot rice, dim sum, market stalls).</p><ul><li>7-Eleven ATMs around TST work as a backup but charge fees.</li><li>Octopus handles most things — cash is just for the old-school spots.</li></ul>"},
     {ix:"03", h:"Two things to book ahead", html:"<ul><li><b>Peak Tram</b> — buy a timed-slot ticket online before Monday; the walk-up queue can eat an hour.</li><li><b>Bar Leone</b> — there are no reservations, so put your name in early (5–6pm). The wait is the whole reason to eat or drink elsewhere first.</li></ul>"},
-    {ix:"04", h:"Closed-day traps", html:"<ul><li><b>COA</b> & <b>The Savory Project</b> — closed Mondays (Sunday-only for you).</li><li><b>M+ Museum</b> — closed Mondays; it's slotted on Wednesday.</li><li><b>Kau Kee</b> — still temporarily closed; <b>LAI's Kitchen</b> is a solid claypot backup.</li></ul>"},
+    {ix:"04", h:"Closed-day traps", html:"<ul><li><b>COA</b> & <b>The Savory Project</b> — closed Mondays (bar crawl is Tuesday night).</li><li><b>M+ Museum</b> — closed Mondays; it's slotted on Wednesday.</li><li><b>Kau Kee</b> — still temporarily closed; <b>LAI's Kitchen</b> is a solid claypot backup.</li></ul>"},
     {ix:"05", h:"Skipped & optional", html:"<ul><li><b>Far New Territories outliers</b> — Yue Kee roast goose, Tuen Kee, Big JJ Seafood — each is a half-day pilgrimage; Yat Lok and Tin Lung cover roast goose without the trek.</li><li><b>Wong Tai Sin Temple</b> — quick to reach; swap it into Wednesday morning if temples beat the museum.</li><li><b>Coffee swaps</b> — Moonary and Meanwhile both sit in Monday's Central cluster.</li></ul>"},
     {ix:"06", h:"Departure — TST to airport", html:"<p>Thursday: leave the hotel by <b>~12:15pm</b> for a 3:30pm flight. Kowloon Station Airport Express is ~22 min; aim to be airside by ~1:30pm.</p>"},
     {ix:"07", h:"Cash spots cheat sheet", html:"<ul><li><b>Kwan Kee Claypot</b> — cash only</li><li><b>Sun Hing</b> — cash only</li><li><b>Hop Yik Tai</b> — cash only</li><li><b>Kam Fai Dim Sum</b> — cash only</li><li><b>Temple Street / Ladies' Market</b> — cash preferred for haggling</li></ul>"}
@@ -425,17 +414,16 @@
 
   const ZONES = [
     {title:"Base · Ramada Hong Kong Grand (TST)", acc:"BASE", lat:22.2975, lng:114.1755, base:true},
-    {title:"Sun & Mon · Central bars + Victoria Peak", acc:"CENTRAL", lat:22.2825, lng:114.1545},
-    {title:"Tue · Causeway Bay & Wan Chai", acc:"EAST", lat:22.2798, lng:114.1840},
+    {title:"Mon · Central + Victoria Peak", acc:"CENTRAL", lat:22.2825, lng:114.1545},
+    {title:"Tue · Causeway Bay + SoHo bars", acc:"EAST", lat:22.2798, lng:114.1840},
     {title:"Wed · M+ & Kowloon markets", acc:"KOWLOON", lat:22.3140, lng:114.1660},
     {title:"Thu · TST waterfront", acc:"TST", lat:22.2933, lng:114.1714}
   ];
 
   /* ---------------- Day atmosphere images (Unsplash) ---------------- */
   const DAY_IMAGES = {
-    sun: {src:"images/sun-skyline.jpg", alt:"Hong Kong skyline at night from Victoria Peak"},
-    mon: {src:"images/mon-peak.jpg", alt:"Neon signs lighting up a Hong Kong street at night"},
-    tue: {src:"images/tue-causeway.jpg", alt:"Busy Hong Kong street with double-decker trams and taxis"},
+    mon: {src:"images/sun-skyline.jpg", alt:"Hong Kong skyline at night from Victoria Peak"},
+    tue: {src:"images/mon-peak.jpg", alt:"Neon signs lighting up a Hong Kong street at night"},
     wed: {src:"images/wed-temple-st.jpg", alt:"Temple Street night market bustling with shoppers"},
     thu: {src:"images/thu-ferry.jpg", alt:"Star Ferry pier and Hong Kong Island skyline at night"}
   };
