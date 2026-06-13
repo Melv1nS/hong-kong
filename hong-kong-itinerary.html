@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hong Kong · Field Catalogue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,650&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+  :root{
+    --accent:#A93624; --bg:#E8DFCF; --border:#C9BEA8; --error:#8F382B;
+    --info:#5C6470; --muted:#827868; --primary:#201F1B; --secondary:#34312B;
+    --success:#4F6A43; --surface:#F4EDDC; --text:#201F1B; --warning:#A86B2D;
+    --s4:4px; --s8:8px; --s10:10px; --s14:14px; --s18:18px; --s24:24px;
+    --s28:28px; --s34:34px; --s42:42px; --s54:54px; --s92:92px;
+    --shadow-sm:0 8px 24px rgba(51,43,31,.08);
+    --shadow-md:0 24px 70px rgba(51,43,31,.12);
+    --shadow-lg:0 42px 120px rgba(32,31,27,.18);
+    --ease:cubic-bezier(.2,.7,.1,1);
+    --ff-head:'Noto Serif SC', serif;
+    --ff-body:'Source Serif 4', Georgia, serif;
+    --ff-mono:'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    font-family:var(--ff-body);
+    font-size:16px; line-height:1.5; letter-spacing:-0.02em;
+    color:var(--text);
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(130% 90% at 50% -12%, rgba(244,237,220,.95), rgba(232,223,207,0) 60%),
+      repeating-linear-gradient(0deg, rgba(32,31,27,.035) 0 1px, transparent 1px 48px),
+      repeating-linear-gradient(90deg, rgba(32,31,27,.022) 0 1px, transparent 1px 48px);
+    background-attachment:fixed;
+  }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 var(--s24) var(--s92); }
+
+  /* ---------- Masthead ---------- */
+  .masthead{ position:relative; overflow:hidden; padding:var(--s54) 0 var(--s42); }
+  .ink{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+  .ink span{ position:absolute; display:block; filter:contrast(1.1); }
+  .ink span:nth-child(1){ width:420px; height:170px; right:-60px; top:6px; border-radius:60% 40% 55% 45%/70% 60% 40% 30%; background:rgba(32,31,27,.06); transform:rotate(-13deg); }
+  .ink span:nth-child(2){ width:240px; height:96px; right:120px; top:78px; border-radius:55% 45% 50% 50%/60% 50% 50% 40%; background:rgba(169,54,36,.12); transform:rotate(9deg); }
+  .ink span:nth-child(3){ width:150px; height:60px; right:30px; top:150px; border-radius:60% 40% 45% 55%/55% 45% 55% 45%; background:rgba(32,31,27,.05); transform:rotate(-4deg); }
+  .masthead__inner{ position:relative; z-index:1; }
+
+  .eyebrow{ font-family:var(--ff-mono); font-size:12px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .seal-eyebrow{ display:inline-block; color:var(--accent); border:1px solid var(--accent); padding:2px 7px; margin-right:10px; }
+
+  h1{ font-family:var(--ff-head); font-weight:700; letter-spacing:-0.03em; margin:var(--s18) 0 0; line-height:1; }
+  .h1-cjk{ font-size:clamp(64px, 13vw, 132px); display:block; }
+  .h1-latin{ font-size:clamp(22px, 3.4vw, 34px); font-weight:600; display:block; margin-top:var(--s10); color:var(--secondary); }
+  .lede{ max-width:46ch; margin:var(--s18) 0 0; font-size:18px; color:var(--secondary); }
+
+  .meta-row{ display:flex; flex-wrap:wrap; gap:var(--s8) var(--s28); margin-top:var(--s28);
+    font-family:var(--ff-mono); font-size:12px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+  .meta-row b{ color:var(--text); font-weight:500; }
+  .meta-row .k{ color:var(--accent); }
+
+  /* ---------- Tabs ---------- */
+  .tabs{ position:sticky; top:0; z-index:20; display:flex; flex-wrap:wrap; gap:0;
+    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    background:var(--bg); margin-top:var(--s24); }
+  .tab{ appearance:none; background:transparent; border:0; cursor:pointer;
+    padding:var(--s14) var(--s18); font-family:var(--ff-mono); font-size:12.5px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    border-bottom:4px solid transparent; transition:color .16s var(--ease), border-color .16s var(--ease); }
+  .tab .day{ color:inherit; }
+  .tab .sub{ display:block; font-size:10.5px; letter-spacing:.1em; margin-top:3px; color:var(--muted); }
+  .tab:hover{ color:var(--secondary); }
+  .tab[aria-selected="true"]{ color:var(--text); border-bottom-color:var(--accent); }
+  .tab[aria-selected="true"] .sub{ color:var(--accent); }
+
+  /* ---------- Panels ---------- */
+  .panel{ display:none; padding-top:var(--s42); }
+  .panel.is-active{ display:block; animation:reveal .42s var(--ease); }
+  @keyframes reveal{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+
+  .panel__head{ margin-bottom:var(--s28); }
+  .panel__kicker{ font-family:var(--ff-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  .panel__title{ font-family:var(--ff-head); font-weight:700; font-size:clamp(30px,5vw,46px); line-height:1.05; margin:var(--s10) 0 0; }
+  .panel__title .cjk{ color:var(--secondary); margin-left:14px; font-weight:600; }
+  .panel__sub{ font-family:var(--ff-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-top:var(--s10); }
+  .panel__summary{ max-width:60ch; margin:var(--s14) 0 0; color:var(--secondary); }
+
+  /* ---------- Catalogue scene grid ---------- */
+  .scene{ display:grid; grid-template-columns: minmax(0,1.25fr) 360px; gap:var(--s42); align-items:start; }
+  .object{ position:relative; }
+  .map{ width:100%; height:540px; border:1px solid var(--border); box-shadow:var(--shadow-md); background:var(--surface); }
+  .object__cap{ font-family:var(--ff-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-top:var(--s10); display:flex; justify-content:space-between; gap:var(--s14); }
+
+  .record-panel{ background:var(--surface); border:1px solid var(--border); box-shadow:var(--shadow-sm); }
+  .record-panel__hd{ padding:var(--s18) var(--s18) var(--s14); border-bottom:1px solid var(--border); }
+  .record-panel__hd .label{ font-family:var(--ff-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .record-panel__hd .count{ font-family:var(--ff-head); font-weight:600; font-size:20px; margin-top:4px; }
+
+  .record{ display:grid; grid-template-columns:48px 1fr; gap:var(--s14); padding:var(--s18); border-bottom:1px solid var(--border); }
+  .record:last-child{ border-bottom:0; }
+  .record__mark{ text-align:center; }
+  .num{ width:34px; height:34px; margin:0 auto; display:flex; align-items:center; justify-content:center;
+    font-family:var(--ff-mono); font-size:14px; font-weight:500; color:var(--surface);
+    background:var(--primary); }
+  .record.is-anchor .num{ background:var(--accent); box-shadow:0 0 0 1px var(--surface), 0 0 0 3px var(--accent); }
+  .record.is-opt .num{ background:transparent; color:var(--muted); border:1px dashed var(--muted); }
+  .record__mark .time{ display:block; font-family:var(--ff-mono); font-size:10.5px; letter-spacing:.04em; color:var(--secondary); margin-top:7px; }
+  .record__mark .acc{ display:block; font-family:var(--ff-mono); font-size:9px; letter-spacing:.08em; color:var(--muted); margin-top:3px; }
+  .record__cat{ font-family:var(--ff-mono); font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+  .record.is-anchor .record__cat .seal{ color:var(--accent); font-weight:500; }
+  .record__title{ font-family:var(--ff-head); font-weight:600; font-size:19px; line-height:1.2; margin:5px 0 0; }
+  .record__note{ margin:7px 0 0; font-size:14.5px; color:var(--secondary); }
+
+  /* ---------- Field note (logistics within a day) ---------- */
+  .fieldnote{ margin-top:var(--s24); border-left:4px solid var(--accent); background:var(--surface);
+    border-top:1px solid var(--border); border-right:1px solid var(--border); border-bottom:1px solid var(--border);
+    padding:var(--s14) var(--s18); }
+  .fieldnote .label{ font-family:var(--ff-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  .fieldnote p{ margin:6px 0 0; font-size:14.5px; color:var(--secondary); }
+
+  /* ---------- Essentials ---------- */
+  .essentials{ display:grid; grid-template-columns: minmax(0,1fr) 360px; gap:var(--s42); align-items:start; }
+  .records-list{ display:grid; gap:var(--s24); }
+  .ess-card{ background:var(--surface); border:1px solid var(--border); box-shadow:var(--shadow-sm); padding:var(--s18) var(--s24); }
+  .ess-card h3{ font-family:var(--ff-head); font-weight:600; font-size:20px; margin:0; display:flex; align-items:baseline; gap:10px; }
+  .ess-card h3 .ix{ font-family:var(--ff-mono); font-size:12px; letter-spacing:.1em; color:var(--accent); }
+  .ess-card p{ margin:var(--s10) 0 0; color:var(--secondary); font-size:15px; }
+  .ess-card ul{ margin:var(--s10) 0 0; padding-left:1.1em; color:var(--secondary); font-size:15px; }
+  .ess-card li{ margin:4px 0; }
+  .ess-card li b, .ess-card p b{ color:var(--text); font-weight:600; }
+
+  /* ---------- Map pins (Leaflet divIcons) ---------- */
+  .pin{ width:26px; height:26px; display:flex; align-items:center; justify-content:center;
+    font-family:var(--ff-mono); font-size:13px; font-weight:500; color:var(--surface);
+    background:var(--primary); border:1px solid var(--surface); box-shadow:var(--shadow-sm); }
+  .pin--anchor{ background:var(--accent); }
+  .pin--opt{ background:var(--surface); color:var(--muted); border:1px dashed var(--muted); }
+  .pin--zone{ width:auto; height:auto; padding:5px 9px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; background:var(--secondary); }
+  .pin--base{ background:var(--accent); }
+  .leaflet-tile-pane{ filter:sepia(.16) contrast(1.02) brightness(1.01); }
+  .leaflet-container{ background:var(--surface); font-family:var(--ff-body); }
+  .leaflet-popup-content-wrapper, .leaflet-popup-tip{ border-radius:0; background:var(--surface); color:var(--text); box-shadow:var(--shadow-md); }
+  .leaflet-popup-content{ font-family:var(--ff-body); margin:12px 14px; }
+  .leaflet-popup-content .pp-acc{ font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); }
+  .leaflet-popup-content .pp-t{ font-family:var(--ff-head); font-weight:600; font-size:16px; margin-top:3px; }
+
+  /* ---------- Footer ---------- */
+  .colophon{ margin-top:var(--s54); padding-top:var(--s18); border-top:1px solid var(--border);
+    font-family:var(--ff-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); line-height:1.8; }
+  .colophon .mark{ color:var(--accent); }
+
+  a{ color:var(--accent); text-decoration-thickness:1px; text-underline-offset:2px; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:980px){
+    .scene{ grid-template-columns:1fr; gap:var(--s24); }
+    .essentials{ grid-template-columns:1fr; gap:var(--s24); }
+    .map{ height:420px; }
+  }
+  @media (max-width:560px){
+    .wrap{ padding:0 var(--s14) var(--s54); }
+    .masthead{ padding:var(--s34) 0 var(--s28); }
+    .map{ height:340px; }
+    .tab{ padding:var(--s10) var(--s14); }
+    .record{ grid-template-columns:42px 1fr; gap:var(--s10); padding:var(--s14); }
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+  @media print{
+    .tabs{ display:none; } .panel{ display:block !important; page-break-before:always; }
+    .map{ box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="ink" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="masthead__inner">
+      <p class="eyebrow"><span class="seal-eyebrow">印</span>Field Catalogue · Sun–Thu · Eat / Drink / Wander</p>
+      <h1>
+        <span class="h1-cjk">香港</span>
+        <span class="h1-latin">Hong Kong — Five Days, Two Sides of the Harbour</span>
+      </h1>
+      <p class="lede">A working catalogue of stops, grouped by neighbourhood so each day stays on one patch of the map. Tap a day; the seal marks its anchor.</p>
+      <div class="meta-row">
+        <span><span class="k">Base</span> &nbsp;<b>Ramada Hong Kong Grand, TST</b></span>
+        <span><span class="k">Arrive</span> &nbsp;<b>Sun 6:30 PM</b></span>
+        <span><span class="k">Depart</span> &nbsp;<b>Thu 3:30 PM</b></span>
+        <span><span class="k">Routes</span> &nbsp;<b>walking unless noted</b></span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Itinerary days">
+    <button class="tab" role="tab" data-tab="essentials" aria-selected="false"><span class="day">Essentials</span><span class="sub">要項 · Logistics</span></button>
+    <button class="tab" role="tab" data-tab="sun" aria-selected="false"><span class="day">Sun</span><span class="sub">Arrival</span></button>
+    <button class="tab" role="tab" data-tab="mon" aria-selected="false"><span class="day">Mon</span><span class="sub">Day 1</span></button>
+    <button class="tab" role="tab" data-tab="tue" aria-selected="false"><span class="day">Tue</span><span class="sub">Day 2</span></button>
+    <button class="tab" role="tab" data-tab="wed" aria-selected="false"><span class="day">Wed</span><span class="sub">Day 3</span></button>
+    <button class="tab" role="tab" data-tab="thu" aria-selected="false"><span class="day">Thu</span><span class="sub">Departure</span></button>
+  </nav>
+
+  <!-- ESSENTIALS -->
+  <section class="panel" id="panel-essentials" role="tabpanel">
+    <div class="panel__head">
+      <p class="panel__kicker">Essentials</p>
+      <h2 class="panel__title">Logistics & seals<span class="cjk">要項</span></h2>
+      <p class="panel__summary">The handful of things that make the rest run smoothly — arrival, the Octopus card, two bookings worth doing in advance, and what didn't make the cut.</p>
+    </div>
+    <div class="essentials">
+      <div class="records-list" id="ess-cards"></div>
+      <div class="object">
+        <div class="map" id="map-essentials"></div>
+        <div class="object__cap"><span>Orientation · base + daily zones</span><span>Harbour runs east–west</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY PANELS (generated content slots) -->
+  <section class="panel" id="panel-sun" role="tabpanel"></section>
+  <section class="panel" id="panel-mon" role="tabpanel"></section>
+  <section class="panel" id="panel-tue" role="tabpanel"></section>
+  <section class="panel" id="panel-wed" role="tabpanel"></section>
+  <section class="panel" id="panel-thu" role="tabpanel"></section>
+
+  <footer class="colophon">
+    <div><span class="mark">印</span> Pressure Archive Ink · drafted from a Wanderlog list</div>
+    <div>Bar Leone = World's Best Bar 2025 · COA & The Savory Project closed Mondays · M+ closed Mondays</div>
+    <div>Map tiles © OpenStreetMap contributors, © CARTO · maps require an internet connection</div>
+  </footer>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  /* ---------------- Data ---------------- */
+  const DAYS = {
+    sun: {
+      code:"SUN", kicker:"Sunday · Arrival", cjk:"日",
+      title:"Drinks & Claypot", sub:"Central · Sheung Wan · SoHo",
+      summary:"Land 6:30pm, drop bags in TST, then cross to Central for a claypot dinner and a five-minute-walk bar crawl. Everything tonight sits in one tight triangle.",
+      capL:"Central / SoHo · walking",
+      fieldnote:{label:"On arrival", text:"Airport Express to Kowloon (~22 min), then the hotel shuttle or a short taxi to the Ramada in TST. Buy an Octopus card at the airport first. Carry cash — tonight's claypot is cash-only."},
+      stops:[
+        {n:1, acc:"SUN·01", time:"8:30 PM", title:"Kwan Kee Claypot Rice", cat:"Claypot", lat:22.2870412, lng:114.1430347,
+         note:"Iconic, chaotic, cash-only; closes 10pm. If you land late, skip it for SoHo bites and save claypot for Wednesday."},
+        {n:2, acc:"SUN·02", time:"9:30 PM", title:"Bar Leone", cat:"Bar · World No.1", anchor:true, lat:22.2835238, lng:114.1509492,
+         note:"World's Best Bar 2025. No reservations — put your name down first (the wait runs ~2hr), then drink nearby and circle back."},
+        {n:3, acc:"SUN·03", time:"9:45 PM", title:"COA", cat:"Bar · Agave", lat:22.2840082, lng:114.1520992,
+         note:"Agave & mezcal, ranked Asia No.17. Open Sundays — but closed Mondays, so it's tonight or never."},
+        {n:4, acc:"SUN·04", time:"11:00 PM", title:"GOKAN", cat:"Bar · Japanese", lat:22.2802246, lng:114.1564511,
+         note:"Five-flavour cocktails; try the Mapo Mary. The Savory Project is open tonight too if you want a fourth stop."}
+      ]
+    },
+    mon: {
+      code:"MON", kicker:"Monday · Day 1", cjk:"月",
+      title:"Central & The Peak", sub:"Sheung Wan · Mid-Levels · Victoria Peak",
+      summary:"Knock out the icons on one walkable hill: coffee, the Peak before the crowds, Michelin roast goose, and an afternoon through Central's design lanes.",
+      capL:"Central + The Peak · walking + tram",
+      fieldnote:{label:"Before you go", text:"Book Peak Tram timed tickets online in advance — the standby queue is brutal. COA and The Savory Project are closed Mondays, so tonight's bar is Penicillin (or back to Bar Leone / GOKAN)."},
+      stops:[
+        {n:1, acc:"MON·01", time:"7:30 AM", title:"Sun Hing", cat:"Dim Sum · optional", opt:true, lat:22.2829656, lng:114.1282358,
+         note:"Only if jet lag wakes you early. A Kennedy Town institution — opens 3am, cash-only. A westward detour, but it fills dead dawn hours well."},
+        {n:2, acc:"MON·02", time:"9:00 AM", title:"Halfway Coffee", cat:"Coffee", lat:22.2846615, lng:114.1497724,
+         note:"Sheung Wan, on Cat Street. Coffee served in vintage Chinese porcelain cups."},
+        {n:3, acc:"MON·03", time:"10:15 AM", title:"Peak Tram Lower Terminus", cat:"Transit", lat:22.2778404, lng:114.1594293,
+         note:"Garden Road. Tap Octopus to skip the ticket line if you didn't pre-book."},
+        {n:4, acc:"MON·04", time:"10:45 AM", title:"Sky Terrace 428", cat:"Summit", anchor:true, lat:22.271205, lng:114.1502533,
+         note:"Top of Victoria Peak. Walk the Lugard Road loop (~40 min) for the full skyline, not just the deck."},
+        {n:5, acc:"MON·05", time:"1:00 PM", title:"Yat Lok", cat:"Roast Goose · 1★", lat:22.2824956, lng:114.1552995,
+         note:"Michelin one-star roast goose on Stanley Street. Tiny, shared tables, quick turnover."},
+        {n:6, acc:"MON·06", time:"2:30 PM", title:"Central–Mid-Levels Escalators", cat:"Sight", lat:22.2838464, lng:114.1549689,
+         note:"Ride up, wander down through SoHo's lanes and street art."},
+        {n:7, acc:"MON·07", time:"3:00 PM", title:"PMQ", cat:"Design · Shop", lat:22.283328, lng:114.1515669,
+         note:"Former police quarters, now design and ceramics studios."},
+        {n:8, acc:"MON·08", time:"3:45 PM", title:"WAKA artisans", cat:"Ceramics", lat:22.2849502, lng:114.1495321,
+         note:"Cat Street. A mother-daughter shop curating Japanese utsuwa tableware. Opens noon."},
+        {n:9, acc:"MON·09", time:"7:00 PM", title:"Penicillin", cat:"Bar", lat:22.2822009, lng:114.1540191,
+         note:"Sustainable cocktails — open Mondays, unlike COA and The Savory Project."}
+      ]
+    },
+    tue: {
+      code:"TUE", kicker:"Tuesday · Day 2", cjk:"火",
+      title:"Causeway Bay & Wan Chai", sub:"East Hong Kong Island",
+      summary:"Your eastern sweep, where the ceramics-and-shopping wish lands best: coffee, the city's most famous beef brisket, homeware, and an egg-tart finish.",
+      capL:"Causeway Bay / Wan Chai · walking",
+      fieldnote:{label:"Note", text:"None of your listed dim sum spots are in this part of town, so today's anchor is brisket. Shopping — G2000, Hysan Place, Times Square — clusters right around HOW to live well."},
+      stops:[
+        {n:1, acc:"TUE·01", time:"9:30 AM", title:"E N", cat:"Coffee", lat:22.2775125, lng:114.1829148,
+         note:"Leighton Road branch — single-origin pour-overs in a calm, Japanese-feeling room."},
+        {n:2, acc:"TUE·02", time:"12:00 PM", title:"Sister Wah", cat:"Beef Brisket · Bib", anchor:true, lat:22.2831794, lng:114.1915492,
+         note:"Michelin Bib beef brisket noodle in clear broth. Tiny and fast; expect a short, quick-moving queue."},
+        {n:3, acc:"TUE·03", time:"1:30 PM", title:"HOW to live well", cat:"Ceramics · Café", lat:22.2798226, lng:114.1837972,
+         note:"Hysan Place. Japanese homeware meets café — your ceramics fix, with Causeway Bay shopping all around it."},
+        {n:4, acc:"TUE·04", time:"3:30 PM", title:"Crew", cat:"Coffee", lat:22.2754433, lng:114.171299,
+         note:"Pocket-sized Wan Chai espresso bar. Grab a Bakehouse sourdough egg tart from next door."}
+      ]
+    },
+    wed: {
+      code:"WED", kicker:"Wednesday · Day 3", cjk:"水",
+      title:"Kowloon: Eat & Markets", sub:"West Kowloon · Sham Shui Po · Mong Kok · Yau Ma Tei",
+      summary:"The 'mostly eating' day plus the museum you shouldn't miss — all on your side of the harbour. South to north and back down for the night market.",
+      capL:"Kowloon · MTR + walking",
+      fieldnote:{label:"Optional", text:"Wong Tai Sin Temple is the one extra sight worth a detour — a quick MTR ride — but it closes 4:30pm, so you'd start there instead of M+ if temples beat museums for you."},
+      stops:[
+        {n:1, acc:"WED·01", time:"10:00 AM", title:"M+ Museum", cat:"Museum", anchor:true, lat:22.3005164, lng:114.1594998,
+         note:"Design and visual culture in West Kowloon — the museum to prioritise. Closed Mondays (the real reason it's today); rooftop harbour views."},
+        {n:2, acc:"WED·02", time:"12:30 PM", title:"Hop Yik Tai", cat:"Cheong Fun", lat:22.3304721, lng:114.1612409,
+         note:"Sham Shui Po. Silky rice rolls under peanut-soy-sweet sauce. Cash, casual."},
+        {n:3, acc:"WED·03", time:"2:00 PM", title:"Mong Kok Flower Market", cat:"Market", lat:22.325233, lng:114.1719183,
+         note:"A whole street of flower and plant shops."},
+        {n:4, acc:"WED·04", time:"2:40 PM", title:"Goldfish Street", cat:"Market", lat:22.3229673, lng:114.1698464,
+         note:"Aquarium and pet shops — quirky, right beside the Flower Market."},
+        {n:5, acc:"WED·05", time:"3:30 PM", title:"Ladies' Market", cat:"Market · Shop", lat:22.317609, lng:114.1709284,
+         note:"Bargain street stalls. Sneakers Street (Fa Yuen St) is one block over."},
+        {n:6, acc:"WED·06", time:"6:00 PM", title:"Temple Street Night Market", cat:"Night Market", lat:22.3065185, lng:114.1699805,
+         note:"Neon, dai pai dong seafood, and souvenir haggling after dark."},
+        {n:7, acc:"WED·07", time:"7:30 PM", title:"Hing Kee", cat:"Claypot", lat:22.31136, lng:114.170107,
+         note:"Claypot rice right on Temple Street (a Lucas Sin pick). Open till midnight."}
+      ]
+    },
+    thu: {
+      code:"THU", kicker:"Thursday · Departure", cjk:"木",
+      title:"TST Waterfront", sub:"Tsim Sha Tsui · steps from the hotel",
+      summary:"A loose final morning by the harbour, then back to pack and head for the airport. Keep it close to the hotel.",
+      capL:"Tsim Sha Tsui · walking",
+      fieldnote:{label:"Departure", text:"For a 3:30pm flight, be at the airport by ~1:30pm. Airport Express from Kowloon Station is ~22 min, plus ~10 min to reach it — leave the hotel by about 12:15pm."},
+      stops:[
+        {n:1, acc:"THU·01", time:"8:45 AM", title:"Urban Coffee Roaster", cat:"Coffee", lat:22.2973689, lng:114.1728934,
+         note:"TST, near the hotel, opens 8am. Solid single-origins and sourdough toast."},
+        {n:2, acc:"THU·02", time:"9:45 AM", title:"Star Ferry Pier", cat:"Crossing", lat:22.2937143, lng:114.1686236,
+         note:"Ride to Central and back — a few Hong Kong dollars for the best harbour view in the city."},
+        {n:3, acc:"THU·03", time:"10:30 AM", title:"Avenue of Stars", cat:"Waterfront", anchor:true, lat:22.2930046, lng:114.1741517,
+         note:"Harbour promenade and the Bruce Lee statue. The Hong Kong Museum of Art is right here if you want one more."}
+      ]
+    }
+  };
+
+  const ESSENTIALS = [
+    {ix:"01", h:"Arrival — airport to TST", html:"<p>Take the <b>Airport Express</b> to Kowloon Station (~22 min), then the free hotel shuttle or a short taxi to the <b>Ramada Hong Kong Grand</b> in TST. Realistically at the hotel ~8pm. Drop bags and head straight to Central for tonight's bars.</p>"},
+    {ix:"02", h:"Octopus card", html:"<p>Grab one at the airport or add it to your phone. It taps you onto the <b>MTR, the Star Ferry, and the Peak Tram</b>, and pays at most eateries — skipping ticket lines all week.</p><ul><li>Still carry <b>cash</b>: Kwan Kee, Sun Hing and Hop Yik Tai are cash-only.</li></ul>"},
+    {ix:"03", h:"Two things to book ahead", html:"<ul><li><b>Peak Tram</b> — buy a timed-slot ticket online before Monday; the walk-up queue can eat an hour.</li><li><b>Bar Leone</b> — there are no reservations, so put your name in early (5–6pm). The wait is the whole reason to eat or drink elsewhere first.</li></ul>"},
+    {ix:"04", h:"Closed-day traps", html:"<ul><li><b>COA</b> & <b>The Savory Project</b> — closed Mondays (Sunday-only for you).</li><li><b>M+ Museum</b> — closed Mondays; it's slotted on Wednesday.</li><li><b>Kau Kee</b> — still temporarily closed; <b>LAI's Kitchen</b> is a solid claypot backup.</li></ul>"},
+    {ix:"05", h:"Skipped & optional", html:"<ul><li><b>Far New Territories outliers</b> — Yue Kee roast goose, Tuen Kee, Big JJ Seafood — each is a half-day pilgrimage; Yat Lok and Tin Lung cover roast goose without the trek.</li><li><b>Wong Tai Sin Temple</b> — quick to reach; swap it into Wednesday morning if temples beat the museum.</li><li><b>Coffee swaps</b> — Moonary and Meanwhile both sit in Monday's Central cluster.</li></ul>"},
+    {ix:"06", h:"Departure — TST to airport", html:"<p>Thursday: leave the hotel by <b>~12:15pm</b> for a 3:30pm flight. Kowloon Station Airport Express is ~22 min; aim to be airside by ~1:30pm.</p>"}
+  ];
+
+  const ZONES = [
+    {title:"Base · Ramada Hong Kong Grand (TST)", acc:"BASE", lat:22.2975, lng:114.1755, base:true},
+    {title:"Sun & Mon · Central bars + Victoria Peak", acc:"CENTRAL", lat:22.2825, lng:114.1545},
+    {title:"Tue · Causeway Bay & Wan Chai", acc:"EAST", lat:22.2798, lng:114.1840},
+    {title:"Wed · M+ & Kowloon markets", acc:"KOWLOON", lat:22.3140, lng:114.1660},
+    {title:"Thu · TST waterfront", acc:"TST", lat:22.2933, lng:114.1714}
+  ];
+
+  /* ---------------- Render day panels ---------------- */
+  function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  function renderDay(key){
+    const d = DAYS[key];
+    const records = d.stops.map(s => `
+      <article class="record ${s.anchor?'is-anchor':''} ${s.opt?'is-opt':''}">
+        <div class="record__mark">
+          <div class="num">${s.n}</div>
+          <span class="time">${esc(s.time)}</span>
+          <span class="acc">${esc(s.acc)}</span>
+        </div>
+        <div class="record__body">
+          <div class="record__cat">${esc(s.cat)}${s.anchor?' &nbsp;<span class="seal">◼ ANCHOR</span>':''}</div>
+          <h4 class="record__title">${esc(s.title)}</h4>
+          <p class="record__note">${esc(s.note)}</p>
+        </div>
+      </article>`).join("");
+
+    return `
+      <div class="panel__head">
+        <p class="panel__kicker">${esc(d.kicker)}</p>
+        <h2 class="panel__title">${esc(d.title)}<span class="cjk">${d.cjk}</span></h2>
+        <p class="panel__sub">${esc(d.sub)}</p>
+        <p class="panel__summary">${esc(d.summary)}</p>
+      </div>
+      <div class="scene">
+        <div class="object">
+          <div class="map" id="map-${key}"></div>
+          <div class="object__cap"><span>${esc(d.capL)}</span><span>${d.stops.length} stops · seal = anchor</span></div>
+        </div>
+        <div>
+          <div class="record-panel">
+            <div class="record-panel__hd">
+              <div class="label">Catalogue · ${esc(d.code)}</div>
+              <div class="count">${d.stops.length} records</div>
+            </div>
+            ${records}
+          </div>
+          <div class="fieldnote">
+            <div class="label">${esc(d.fieldnote.label)}</div>
+            <p>${esc(d.fieldnote.text)}</p>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  Object.keys(DAYS).forEach(k => {
+    document.getElementById("panel-"+k).innerHTML = renderDay(k);
+  });
+
+  // Essentials cards
+  document.getElementById("ess-cards").innerHTML = ESSENTIALS.map(c => `
+    <div class="ess-card">
+      <h3><span class="ix">${c.ix}</span>${esc(c.h)}</h3>
+      ${c.html}
+    </div>`).join("");
+
+  /* ---------------- Maps ---------------- */
+  const TILES = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+  const ATTR = '&copy; OpenStreetMap &copy; CARTO';
+  const maps = {};
+
+  function pinIcon(stop){
+    const cls = "pin " + (stop.anchor?"pin--anchor":"") + " " + (stop.opt?"pin--opt":"");
+    return L.divIcon({ className:"", html:`<div class="${cls}">${stop.n}</div>`, iconSize:[26,26], iconAnchor:[13,13] });
+  }
+  function zoneIcon(z){
+    const cls = "pin pin--zone " + (z.base?"pin--base":"");
+    return L.divIcon({ className:"", html:`<div class="${cls}">${z.acc}</div>`, iconSize:[null,null], iconAnchor:[0,12] });
+  }
+
+  function buildDayMap(key){
+    const d = DAYS[key];
+    const el = document.getElementById("map-"+key);
+    if(!el || maps[key]) return;
+    const map = L.map(el, { scrollWheelZoom:false, zoomControl:true });
+    L.tileLayer(TILES, { attribution:ATTR, subdomains:"abcd", maxZoom:19 }).addTo(map);
+    const pts = [];
+    d.stops.forEach(s => {
+      pts.push([s.lat, s.lng]);
+      L.marker([s.lat, s.lng], { icon:pinIcon(s) })
+        .addTo(map)
+        .bindPopup(`<span class="pp-acc">${s.acc}${s.anchor?' · ANCHOR':''}${s.opt?' · OPTIONAL':''}</span><div class="pp-t">${s.n}. ${esc(s.title)}</div><div>${esc(s.time)} · ${esc(s.cat)}</div>`);
+    });
+    L.polyline(pts, { color:"#201F1B", weight:2, opacity:.55, dashArray:"2 7" }).addTo(map);
+    map.fitBounds(pts, { padding:[42,42] });
+    maps[key] = map;
+  }
+
+  function buildEssentialsMap(){
+    const el = document.getElementById("map-essentials");
+    if(!el || maps.essentials) return;
+    const map = L.map(el, { scrollWheelZoom:false, zoomControl:true });
+    L.tileLayer(TILES, { attribution:ATTR, subdomains:"abcd", maxZoom:19 }).addTo(map);
+    const pts = [];
+    ZONES.forEach(z => {
+      pts.push([z.lat, z.lng]);
+      L.marker([z.lat, z.lng], { icon:zoneIcon(z) })
+        .addTo(map)
+        .bindPopup(`<span class="pp-acc">${z.acc}</span><div class="pp-t">${esc(z.title)}</div>`);
+    });
+    map.fitBounds(pts, { padding:[50,50] });
+    maps.essentials = map;
+  }
+
+  function ensureMap(tab){
+    if(tab === "essentials") buildEssentialsMap();
+    else if(DAYS[tab]) buildDayMap(tab);
+    // resize after the panel becomes visible
+    requestAnimationFrame(() => {
+      const m = maps[tab];
+      if(m){ m.invalidateSize(); }
+    });
+  }
+
+  /* ---------------- Tabs ---------------- */
+  const tabs = Array.from(document.querySelectorAll(".tab"));
+  function activate(tab){
+    tabs.forEach(t => t.setAttribute("aria-selected", String(t.dataset.tab === tab)));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("is-active"));
+    document.getElementById("panel-"+tab).classList.add("is-active");
+    ensureMap(tab);
+    history.replaceState(null, "", "#"+tab);
+  }
+  tabs.forEach(t => t.addEventListener("click", () => activate(t.dataset.tab)));
+  // keyboard arrow nav
+  tabs.forEach((t, i) => t.addEventListener("keydown", e => {
+    if(e.key==="ArrowRight" || e.key==="ArrowLeft"){
+      e.preventDefault();
+      const dir = e.key==="ArrowRight" ? 1 : -1;
+      const next = tabs[(i + dir + tabs.length) % tabs.length];
+      next.focus(); activate(next.dataset.tab);
+    }
+  }));
+
+  const start = (location.hash || "#essentials").slice(1);
+  activate(DAYS[start] || start==="essentials" ? start : "essentials");
+</script>
+</body>
+</html>
