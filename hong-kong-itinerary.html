@@ -10,14 +10,15 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <style>
   :root{
-    --accent:#A93624; --bg:#E8DFCF; --border:#C9BEA8; --error:#8F382B;
-    --info:#5C6470; --muted:#827868; --primary:#201F1B; --secondary:#34312B;
-    --success:#4F6A43; --surface:#F4EDDC; --text:#201F1B; --warning:#A86B2D;
+    --accent:#E8443A; --accent-glow:rgba(232,68,58,.4); --neon-pink:#FF6B9D; --neon-blue:#4ECDC4;
+    --bg:#1A1A2E; --border:#2D2D44; --error:#E8443A;
+    --info:#8892A4; --muted:#6B6B8A; --primary:#F0E6D3; --secondary:#C4B8A5;
+    --success:#4ECDC4; --surface:#16213E; --text:#F0E6D3; --warning:#F4A261;
     --s4:4px; --s8:8px; --s10:10px; --s14:14px; --s18:18px; --s24:24px;
     --s28:28px; --s34:34px; --s42:42px; --s54:54px; --s92:92px;
-    --shadow-sm:0 8px 24px rgba(51,43,31,.08);
-    --shadow-md:0 24px 70px rgba(51,43,31,.12);
-    --shadow-lg:0 42px 120px rgba(32,31,27,.18);
+    --shadow-sm:0 8px 24px rgba(0,0,0,.25);
+    --shadow-md:0 24px 70px rgba(0,0,0,.35);
+    --shadow-lg:0 42px 120px rgba(0,0,0,.45);
     --ease:cubic-bezier(.2,.7,.1,1);
     --ff-head:'Noto Serif SC', serif;
     --ff-body:'Source Serif 4', Georgia, serif;
@@ -33,9 +34,10 @@
     color:var(--text);
     background-color:var(--bg);
     background-image:
-      radial-gradient(130% 90% at 50% -12%, rgba(244,237,220,.95), rgba(232,223,207,0) 60%),
-      repeating-linear-gradient(0deg, rgba(32,31,27,.035) 0 1px, transparent 1px 48px),
-      repeating-linear-gradient(90deg, rgba(32,31,27,.022) 0 1px, transparent 1px 48px);
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,68,58,.06), transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(78,205,196,.04), transparent 40%),
+      repeating-linear-gradient(0deg, rgba(240,230,211,.02) 0 1px, transparent 1px 48px),
+      repeating-linear-gradient(90deg, rgba(240,230,211,.015) 0 1px, transparent 1px 48px);
     background-attachment:fixed;
   }
 
@@ -45,16 +47,18 @@
   .masthead{ position:relative; overflow:hidden; padding:var(--s54) 0 var(--s42); }
   .ink{ position:absolute; inset:0; z-index:0; pointer-events:none; }
   .ink span{ position:absolute; display:block; filter:contrast(1.1); }
-  .ink span:nth-child(1){ width:420px; height:170px; right:-60px; top:6px; border-radius:60% 40% 55% 45%/70% 60% 40% 30%; background:rgba(32,31,27,.06); transform:rotate(-13deg); }
-  .ink span:nth-child(2){ width:240px; height:96px; right:120px; top:78px; border-radius:55% 45% 50% 50%/60% 50% 50% 40%; background:rgba(169,54,36,.12); transform:rotate(9deg); }
-  .ink span:nth-child(3){ width:150px; height:60px; right:30px; top:150px; border-radius:60% 40% 45% 55%/55% 45% 55% 45%; background:rgba(32,31,27,.05); transform:rotate(-4deg); }
+  .ink span:nth-child(1){ width:420px; height:170px; right:-60px; top:6px; border-radius:60% 40% 55% 45%/70% 60% 40% 30%; background:rgba(232,68,58,.08); transform:rotate(-13deg); }
+  .ink span:nth-child(2){ width:240px; height:96px; right:120px; top:78px; border-radius:55% 45% 50% 50%/60% 50% 50% 40%; background:rgba(78,205,196,.1); transform:rotate(9deg); }
+  .ink span:nth-child(3){ width:150px; height:60px; right:30px; top:150px; border-radius:60% 40% 45% 55%/55% 45% 55% 45%; background:rgba(255,107,157,.06); transform:rotate(-4deg); }
   .masthead__inner{ position:relative; z-index:1; }
 
   .eyebrow{ font-family:var(--ff-mono); font-size:12px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
-  .seal-eyebrow{ display:inline-block; color:var(--accent); border:1px solid var(--accent); padding:2px 7px; margin-right:10px; }
+  .seal-eyebrow{ display:inline-block; color:var(--accent); border:1px solid var(--accent); padding:2px 7px; margin-right:10px;
+    box-shadow:0 0 8px var(--accent-glow), inset 0 0 8px rgba(232,68,58,.1); }
 
   h1{ font-family:var(--ff-head); font-weight:700; letter-spacing:-0.03em; margin:var(--s18) 0 0; line-height:1; }
-  .h1-cjk{ font-size:clamp(64px, 13vw, 132px); display:block; }
+  .h1-cjk{ font-size:clamp(64px, 13vw, 132px); display:block;
+    text-shadow:0 0 30px var(--accent-glow), 0 0 60px rgba(232,68,58,.15); }
   .h1-latin{ font-size:clamp(22px, 3.4vw, 34px); font-weight:600; display:block; margin-top:var(--s10); color:var(--secondary); }
   .lede{ max-width:46ch; margin:var(--s18) 0 0; font-size:18px; color:var(--secondary); }
 
@@ -74,7 +78,8 @@
   .tab .day{ color:inherit; }
   .tab .sub{ display:block; font-size:10.5px; letter-spacing:.1em; margin-top:3px; color:var(--muted); }
   .tab:hover{ color:var(--secondary); }
-  .tab[aria-selected="true"]{ color:var(--text); border-bottom-color:var(--accent); }
+  .tab[aria-selected="true"]{ color:var(--text); border-bottom-color:var(--accent);
+    text-shadow:0 0 10px var(--accent-glow); }
   .tab[aria-selected="true"] .sub{ color:var(--accent); }
 
   /* ---------- Panels ---------- */
@@ -106,7 +111,7 @@
   .num{ width:34px; height:34px; margin:0 auto; display:flex; align-items:center; justify-content:center;
     font-family:var(--ff-mono); font-size:14px; font-weight:500; color:var(--surface);
     background:var(--primary); }
-  .record.is-anchor .num{ background:var(--accent); box-shadow:0 0 0 1px var(--surface), 0 0 0 3px var(--accent); }
+  .record.is-anchor .num{ background:var(--accent); box-shadow:0 0 0 1px var(--surface), 0 0 0 3px var(--accent), 0 0 12px var(--accent-glow); }
   .record.is-opt .num{ background:transparent; color:var(--muted); border:1px dashed var(--muted); }
   .record__mark .time{ display:block; font-family:var(--ff-mono); font-size:10.5px; letter-spacing:.04em; color:var(--secondary); margin-top:7px; }
   .record__mark .acc{ display:block; font-family:var(--ff-mono); font-size:9px; letter-spacing:.08em; color:var(--muted); margin-top:3px; }
@@ -118,7 +123,7 @@
   /* ---------- Field note (logistics within a day) ---------- */
   .fieldnote{ margin-top:var(--s24); border-left:4px solid var(--accent); background:var(--surface);
     border-top:1px solid var(--border); border-right:1px solid var(--border); border-bottom:1px solid var(--border);
-    padding:var(--s14) var(--s18); }
+    padding:var(--s14) var(--s18); box-shadow:inset 4px 0 12px -4px var(--accent-glow); }
   .fieldnote .label{ font-family:var(--ff-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
   .fieldnote p{ margin:6px 0 0; font-size:14.5px; color:var(--secondary); }
 
@@ -137,11 +142,11 @@
   .pin{ width:26px; height:26px; display:flex; align-items:center; justify-content:center;
     font-family:var(--ff-mono); font-size:13px; font-weight:500; color:var(--surface);
     background:var(--primary); border:1px solid var(--surface); box-shadow:var(--shadow-sm); }
-  .pin--anchor{ background:var(--accent); }
+  .pin--anchor{ background:var(--accent); box-shadow:0 0 10px var(--accent-glow), 0 0 20px rgba(232,68,58,.2); }
   .pin--opt{ background:var(--surface); color:var(--muted); border:1px dashed var(--muted); }
   .pin--zone{ width:auto; height:auto; padding:5px 9px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; background:var(--secondary); }
   .pin--base{ background:var(--accent); }
-  .leaflet-tile-pane{ filter:sepia(.16) contrast(1.02) brightness(1.01); }
+  .leaflet-tile-pane{ filter:invert(.92) hue-rotate(180deg) saturate(.8) brightness(.9); }
   .leaflet-container{ background:var(--surface); font-family:var(--ff-body); }
   .leaflet-popup-content-wrapper, .leaflet-popup-tip{ border-radius:0; background:var(--surface); color:var(--text); box-shadow:var(--shadow-md); }
   .leaflet-popup-content{ font-family:var(--ff-body); margin:12px 14px; }
@@ -152,6 +157,23 @@
   .colophon{ margin-top:var(--s54); padding-top:var(--s18); border-top:1px solid var(--border);
     font-family:var(--ff-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); line-height:1.8; }
   .colophon .mark{ color:var(--accent); }
+
+  /* ---------- Hero image strip ---------- */
+  .hero-strip{ position:relative; width:100%; aspect-ratio:16/6; margin-top:var(--s24); overflow:hidden;
+    border:1px solid var(--border); box-shadow:var(--shadow-md); }
+  .hero-strip img{ width:100%; height:100%; object-fit:cover; object-position:center 40%; filter:saturate(1.1) contrast(1.1) brightness(.85); }
+  .hero-strip__cap{ position:absolute; bottom:0; left:0; right:0;
+    padding:var(--s10) var(--s18); background:linear-gradient(transparent, rgba(26,26,46,.85));
+    font-family:var(--ff-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:rgba(240,230,211,.85);
+    text-shadow:0 0 8px var(--accent-glow); }
+
+  /* ---------- Panel atmosphere images ---------- */
+  .panel__img{ width:100%; aspect-ratio:16/7; object-fit:cover; margin-bottom:var(--s24);
+    border:1px solid var(--border); box-shadow:var(--shadow-sm), 0 0 20px rgba(232,68,58,.08);
+    filter:saturate(1.15) contrast(1.08) brightness(.88); }
+
+  /* ---------- Neon accent for HK vibe ---------- */
+  .neon-hint{ text-shadow:0 0 20px var(--accent-glow), 0 0 40px rgba(232,68,58,.15); }
 
   a{ color:var(--accent); text-decoration-thickness:1px; text-underline-offset:2px; }
   :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
@@ -199,6 +221,11 @@
     </div>
   </header>
 
+  <div class="hero-strip">
+    <img src="images/hero-neon.jpg" alt="Hong Kong neon signs at night in Mong Kok" />
+    <div class="hero-strip__cap">Mong Kok · neon signage · the city that never sleeps</div>
+  </div>
+
   <nav class="tabs" role="tablist" aria-label="Itinerary days">
     <button class="tab" role="tab" data-tab="essentials" aria-selected="false"><span class="day">Essentials</span><span class="sub">要項 · Logistics</span></button>
     <button class="tab" role="tab" data-tab="sun" aria-selected="false"><span class="day">Sun</span><span class="sub">Arrival</span></button>
@@ -210,6 +237,7 @@
 
   <!-- ESSENTIALS -->
   <section class="panel" id="panel-essentials" role="tabpanel">
+    <img class="panel__img" src="images/essentials-tram.jpg" alt="Hong Kong double-decker tram on a busy street" loading="lazy" />
     <div class="panel__head">
       <p class="panel__kicker">Essentials</p>
       <h2 class="panel__title">Logistics & seals<span class="cjk">要項</span></h2>
@@ -329,16 +357,18 @@
     },
     thu: {
       code:"THU", kicker:"Thursday · Departure", cjk:"木",
-      title:"TST Waterfront", sub:"Tsim Sha Tsui · steps from the hotel",
-      summary:"A loose final morning by the harbour, then back to pack and head for the airport. Keep it close to the hotel.",
+      title:"Dim Sum & TST Waterfront", sub:"Tsim Sha Tsui · steps from the hotel",
+      summary:"Start with a proper dim sum send-off at Kam Fai, stroll the waterfront, then pack and head for the airport. Keep it close to the hotel.",
       capL:"Tsim Sha Tsui · walking",
       fieldnote:{label:"Departure", text:"For a 3:30pm flight, be at the airport by ~1:30pm. Airport Express from Kowloon Station is ~22 min, plus ~10 min to reach it — leave the hotel by about 12:15pm."},
       stops:[
-        {n:1, acc:"THU·01", time:"8:45 AM", title:"Urban Coffee Roaster", cat:"Coffee", lat:22.2973689, lng:114.1728934,
+        {n:1, acc:"THU·01", time:"7:30 AM", title:"Kam Fai Dim Sum", cat:"Dim Sum", anchor:true, lat:22.3011, lng:114.1713,
+         note:"Old-school Kowloon dim sum — cash-only, no frills, packed with locals. Har gow, siu mai, cheung fun. Go early to beat the rush."},
+        {n:2, acc:"THU·02", time:"9:15 AM", title:"Urban Coffee Roaster", cat:"Coffee", lat:22.2973689, lng:114.1728934,
          note:"TST, near the hotel, opens 8am. Solid single-origins and sourdough toast."},
-        {n:2, acc:"THU·02", time:"9:45 AM", title:"Star Ferry Pier", cat:"Crossing", lat:22.2937143, lng:114.1686236,
+        {n:3, acc:"THU·03", time:"10:00 AM", title:"Star Ferry Pier", cat:"Crossing", lat:22.2937143, lng:114.1686236,
          note:"Ride to Central and back — a few Hong Kong dollars for the best harbour view in the city."},
-        {n:3, acc:"THU·03", time:"10:30 AM", title:"Avenue of Stars", cat:"Waterfront", anchor:true, lat:22.2930046, lng:114.1741517,
+        {n:4, acc:"THU·04", time:"10:45 AM", title:"Avenue of Stars", cat:"Waterfront", lat:22.2930046, lng:114.1741517,
          note:"Harbour promenade and the Bruce Lee statue. The Hong Kong Museum of Art is right here if you want one more."}
       ]
     }
@@ -346,11 +376,13 @@
 
   const ESSENTIALS = [
     {ix:"01", h:"Arrival — airport to TST", html:"<p>Take the <b>Airport Express</b> to Kowloon Station (~22 min), then the free hotel shuttle or a short taxi to the <b>Ramada Hong Kong Grand</b> in TST. Realistically at the hotel ~8pm. Drop bags and head straight to Central for tonight's bars.</p>"},
-    {ix:"02", h:"Octopus card", html:"<p>Grab one at the airport or add it to your phone. It taps you onto the <b>MTR, the Star Ferry, and the Peak Tram</b>, and pays at most eateries — skipping ticket lines all week.</p><ul><li>Still carry <b>cash</b>: Kwan Kee, Sun Hing and Hop Yik Tai are cash-only.</li></ul>"},
+    {ix:"02", h:"Octopus card", html:"<p>Grab one at the airport or add it to your phone. It taps you onto the <b>MTR, the Star Ferry, and the Peak Tram</b>, and pays at most eateries — skipping ticket lines all week.</p><ul><li>Still carry <b>cash</b>: Kwan Kee, Sun Hing, Hop Yik Tai and Kam Fai are cash-only.</li></ul>"},
+    {ix:"02b", h:"Get cash", html:"<p>Withdraw <b>HKD</b> at the airport ATMs on arrival — HSBC and Hang Seng ATMs have low/no fees for international cards. Aim for <b>~HK$800–1,000</b> to cover the cash-only spots (claypot rice, dim sum, market stalls).</p><ul><li>7-Eleven ATMs around TST work as a backup but charge fees.</li><li>Octopus handles most things — cash is just for the old-school spots.</li></ul>"},
     {ix:"03", h:"Two things to book ahead", html:"<ul><li><b>Peak Tram</b> — buy a timed-slot ticket online before Monday; the walk-up queue can eat an hour.</li><li><b>Bar Leone</b> — there are no reservations, so put your name in early (5–6pm). The wait is the whole reason to eat or drink elsewhere first.</li></ul>"},
     {ix:"04", h:"Closed-day traps", html:"<ul><li><b>COA</b> & <b>The Savory Project</b> — closed Mondays (Sunday-only for you).</li><li><b>M+ Museum</b> — closed Mondays; it's slotted on Wednesday.</li><li><b>Kau Kee</b> — still temporarily closed; <b>LAI's Kitchen</b> is a solid claypot backup.</li></ul>"},
     {ix:"05", h:"Skipped & optional", html:"<ul><li><b>Far New Territories outliers</b> — Yue Kee roast goose, Tuen Kee, Big JJ Seafood — each is a half-day pilgrimage; Yat Lok and Tin Lung cover roast goose without the trek.</li><li><b>Wong Tai Sin Temple</b> — quick to reach; swap it into Wednesday morning if temples beat the museum.</li><li><b>Coffee swaps</b> — Moonary and Meanwhile both sit in Monday's Central cluster.</li></ul>"},
-    {ix:"06", h:"Departure — TST to airport", html:"<p>Thursday: leave the hotel by <b>~12:15pm</b> for a 3:30pm flight. Kowloon Station Airport Express is ~22 min; aim to be airside by ~1:30pm.</p>"}
+    {ix:"06", h:"Departure — TST to airport", html:"<p>Thursday: leave the hotel by <b>~12:15pm</b> for a 3:30pm flight. Kowloon Station Airport Express is ~22 min; aim to be airside by ~1:30pm.</p>"},
+    {ix:"07", h:"Cash spots cheat sheet", html:"<ul><li><b>Kwan Kee Claypot</b> — cash only</li><li><b>Sun Hing</b> — cash only</li><li><b>Hop Yik Tai</b> — cash only</li><li><b>Kam Fai Dim Sum</b> — cash only</li><li><b>Temple Street / Ladies' Market</b> — cash preferred for haggling</li></ul>"}
   ];
 
   const ZONES = [
@@ -360,6 +392,15 @@
     {title:"Wed · M+ & Kowloon markets", acc:"KOWLOON", lat:22.3140, lng:114.1660},
     {title:"Thu · TST waterfront", acc:"TST", lat:22.2933, lng:114.1714}
   ];
+
+  /* ---------------- Day atmosphere images (Unsplash) ---------------- */
+  const DAY_IMAGES = {
+    sun: {src:"images/sun-skyline.jpg", alt:"Hong Kong skyline at night from Victoria Peak"},
+    mon: {src:"images/mon-peak.jpg", alt:"Neon signs lighting up a Hong Kong street at night"},
+    tue: {src:"images/tue-causeway.jpg", alt:"Busy Hong Kong street with double-decker trams and taxis"},
+    wed: {src:"images/wed-temple-st.jpg", alt:"Temple Street night market bustling with shoppers"},
+    thu: {src:"images/thu-ferry.jpg", alt:"Star Ferry pier and Hong Kong Island skyline at night"}
+  };
 
   /* ---------------- Render day panels ---------------- */
   function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
@@ -380,7 +421,9 @@
         </div>
       </article>`).join("");
 
+    const img = DAY_IMAGES[key];
     return `
+      ${img ? `<img class="panel__img" src="${img.src}" alt="${esc(img.alt)}" loading="lazy" />` : ''}
       <div class="panel__head">
         <p class="panel__kicker">${esc(d.kicker)}</p>
         <h2 class="panel__title">${esc(d.title)}<span class="cjk">${d.cjk}</span></h2>
